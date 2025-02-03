@@ -149,7 +149,9 @@ def load_single_file(file_path):
 
     # Create the PyG Data object
     data = Data(x=x, edge_index=edge_index, batch=batch)
-
+    if data is None:
+        print(f"Failed to parse {file_path}. Skipping.")
+        return None
     print(f"Successfully created graph for: {file_path}")  # Debug: Graph creation success
     return data
 
@@ -161,8 +163,12 @@ def load_data_from_folder(folder_path, is_augmented=False):
             file_path = os.path.join(folder_path, filename)
             data = load_single_file(file_path)
             label = 1 if is_augmented else 0  # 1 for augmented, 0 for original
-            data.y = torch.tensor([label], dtype=torch.float)  # Adding the label to the data
-            data_list.append(data)
+            if data is not None:
+                data.y = torch.tensor([label], dtype=torch.float)  # Adding the label to the data
+                data_list.append(data)
+            else:
+                print(f"Skipping file with invalid data: {file_path}")
+            
     return data_list
 
 # Function to load both original and augmented data
@@ -192,8 +198,8 @@ class GNNModel(nn.Module):
         return x
 
 # Example usage: Load data from both original and augmented folders
-original_folder = "./testing/original1"
-augmented_folder = "./testing/augmented1"
+original_folder = "./testing/original"
+augmented_folder = "./testing/augmented"
 data_list = load_original_and_augmented_data(original_folder, augmented_folder)
 print(f"Loaded {len(data_list)} graphs.")
 

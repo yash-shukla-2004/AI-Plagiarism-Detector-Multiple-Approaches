@@ -145,12 +145,17 @@ def load_single_file(file_path):
 
 def load_data_from_folder(folder_path):
     data_list = []
+    skip_count=0
     for filename in os.listdir(folder_path):
         if filename.endswith(".java"):  # You can change this if using different file types
             file_path = os.path.join(folder_path, filename)
             data = load_single_file(file_path)
             if data is not None:
                 data_list.append(data)
+            else:
+                skip_count = skip_count + 1
+                print(f"Skipping file with invalid data: {file_path}")
+    print(f"Skip count is : {skip_count}")
     return data_list
 
 class TripletDataset(Dataset):
@@ -192,9 +197,9 @@ class TripletDataset(Dataset):
 from torch_geometric.data import DataLoader
 
 # Example: Assuming you have pre-loaded your original, augmented, and negative data into corresponding lists
-original_data = load_data_from_folder("./testing/original1")  # Your original code graphs
-augmented_data = load_data_from_folder("./testing/augmented1")  # Your augmented (plagiarized) code graphs
-negative_data = load_data_from_folder("./testing/original1")  # Your non-plagiarized code graphs (negative samples)
+original_data = load_data_from_folder("./testing/original")  # Your original code graphs
+augmented_data = load_data_from_folder("./testing/augmented")  # Your augmented (plagiarized) code graphs
+negative_data = load_data_from_folder("./testing/original")  # Your non-plagiarized code graphs (negative samples)
 
 # Create the triplet dataset
 triplet_dataset = TripletDataset(original_data, augmented_data, negative_data)

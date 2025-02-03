@@ -192,9 +192,9 @@ class TripletDataset(Dataset):
 from torch_geometric.data import DataLoader
 
 # Example: Assuming you have pre-loaded your original, augmented, and negative data into corresponding lists
-original_data = load_data_from_folder("./testing/original1")  # Your original code graphs
-augmented_data = load_data_from_folder("./testing/augmented1")  # Your augmented (plagiarized) code graphs
-negative_data = load_data_from_folder("./testing/original1")  # Your non-plagiarized code graphs (negative samples)
+original_data = load_data_from_folder("./testing/original")  # Your original code graphs
+augmented_data = load_data_from_folder("./testing/augmented")  # Your augmented (plagiarized) code graphs
+negative_data = load_data_from_folder("./testing/original")  # Your non-plagiarized code graphs (negative samples)
 
 # Create the triplet dataset
 triplet_dataset = TripletDataset(original_data, augmented_data, negative_data)
